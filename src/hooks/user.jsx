@@ -8,21 +8,19 @@ import { useContext } from "react";
 const useHook = ()=>{
     const {user} = useContext(AuthContext)
     const {data : menu =[], refetch}=useQuery({
-        queryKey:['menu'],
+        queryKey:['user'],
         queryFn:async ()=>{
-            const data = await apiRequest({
+            const you = await apiRequest({
                 url:'/get',
                 method:"GET"
             })
-            console.log(data)
+            return you
         }
     })
 
 
 
-    return (
-        <div>menu</div>
-    )
+    return [ user ];
 }
 
 export default useHook

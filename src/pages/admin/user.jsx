@@ -6,6 +6,8 @@ import { AuthContext } from "../../context/authProvider"
 
 export default function User() {
     const {user} = useContext(AuthContext)
+    const [currentPage,setCurrentPage] = useState(1)
+    const [itemsPerPage] = useState(8)
    
     
     const token = localStorage.getItem("access-token")
@@ -20,18 +22,18 @@ export default function User() {
              return user;
         }
     })
+
     
     const handleMakeAdmin = async (user)=>{
         try {
             const admin = await apiRequest({
                 url:`/update-user/${user._id}`,
                 method:"PUT",
+                token
             })
             if(admin?.success === true){
                 alert(`${user.name} is now an admin`)
-                refetch
-            }else{
-
+                refetch()
             }
         } catch (error) {
             return error
@@ -48,22 +50,24 @@ export default function User() {
             if(userss.success === true){
                 refetch()
                 alert(`${user.name} account has been deleted`)
-                // if(userss === user?.token){
-                // window.location.replace("/login")
-                // }
             }
         } catch (error) {
             return error
         }
     }
+    const indexOfLastName = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastName - itemsPerPage;
+    const currentItems = users?.users?.slice(indexOfFirstItem, indexOfLastName);
+    const pagination = (pageNumber) => setCurrentPage(pageNumber)
+
     return (
-        <div className="mt-40 md:mt-0">
-            <div className="flex items-center justify-between mt-4">
+        <div className="mt- md:mt-0 lg:mt-20">
+            <div className="flex items-center lg:justify-between gap-4 mx-4 text-xl  mt-4">
                 <h4>All Users</h4>
-                <h4>Total-Users :{users?.users?.length}</h4>
+                <h4 className="px-10">Total-Users :{users?.users?.length}</h4>
             </div>
-            <div className="overflow-x-auto">
-                <table className="table table-zebra md:w-[880px]">
+            <div className="overflow-x-auto mt-4">
+                <table className="table table-zebra md:w-[800px] lg:w-[1200px]">
                     {/* head */}
                     <thead className="bg-green-600 rounded-lg text-white">
                         <tr>
@@ -76,7 +80,7 @@ export default function User() {
                         </tr>
                     </thead>
                     {
-                        users?.users?.map((user, index) => (
+                        currentItems?.map((user, index) => (
                             <tbody key={index} className="w-[200px]">
                                 <tr>
                                     <th>{index + 1}</th>
@@ -84,7 +88,7 @@ export default function User() {
                                             <div className="avatar">
                                                 <div className="mask mask-squircle h-12 w-12">
                                                     <img
-                                                        src={user.photoURL}
+                                                        src={user.photoURL || "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" } 
                                                         alt="" />
                                                 </div>
                                             </div>
@@ -106,6 +110,16 @@ export default function User() {
                         ))
                     }
                 </table>
+            </div>
+            <div className="flex justify-center mt-6">
+                {
+                    Array.from({length:Math.ceil(users?.users?.length / itemsPerPage)}).map((_, index)=>(
+                        <button key={index + 1} onClick={()=> pagination(index + 1)} 
+                        className={`mx-1 px-3 py-1 rounded-full ${currentPage === index + 1 ? "bg-green-400 text-white" : "bg-gray-400"}`}>
+                            {index + 1}
+                        </button>
+                    ))
+                }
             </div>
         </div>
     )

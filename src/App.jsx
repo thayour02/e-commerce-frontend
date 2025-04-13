@@ -22,6 +22,8 @@ import CheckOut from './pages/checkout';
 import { useQuery } from '@tanstack/react-query';
 import { apiRequest } from './api/apiRequest';
 import UpdateMenu from './pages/admin/update-menu';
+import Order from './pages/order';
+import Bookings from './pages/admin/bookins';
 
 function App() {
   const { loading, user } = useContext(AuthContext);
@@ -56,6 +58,7 @@ function App() {
           <Route path='/update-profile' element={<PrivateRouter><UpdateProfile /></PrivateRouter>} />
           <Route path='/cart-page' element={<PrivateRouter><CartItems /></PrivateRouter>} />
           <Route path='/checkout' element={<PrivateRouter><CheckOut /></PrivateRouter>} />
+          <Route path='/order' element={<PrivateRouter><Order /></PrivateRouter>}/>
 
         </Routes>
       </div>
@@ -68,6 +71,7 @@ function App() {
             <Route path='/dashboard' element={<PrivateRouter><DashBoardLayout /></PrivateRouter>}>
               <Route path='' element={<DashBoard />} />
               <Route path='users' element={<User />} />
+              <Route path='booking' element={<Bookings />}/>
               <Route path='add-menu' element={<Addmenu />} />
               <Route path='manage-items' element={<ManageItems />} />
               <Route path='update-menu/:id' element={<UpdateMenu />} />

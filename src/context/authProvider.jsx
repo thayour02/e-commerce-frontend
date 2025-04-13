@@ -54,7 +54,7 @@ const AuthProvider = ({ children }) => {
       if (currentUser) {
         try {
           const userInfo = { email: currentUser.email }
-        const response = await axios.post('http://localhost:3000/jwt', userInfo)
+          const response = await axios.post('http://localhost:3000/jwt', userInfo)
             if (response.data.token){
               localStorage.setItem("access-token", response.data.token)
               const userData = response?.data?.users
@@ -64,7 +64,7 @@ const AuthProvider = ({ children }) => {
               localStorage.removeItem("access-token")
             }
         } catch (error) {
-          console.error(error); 
+          throw new Error(error)
         }
       }
       setLoading(false)
