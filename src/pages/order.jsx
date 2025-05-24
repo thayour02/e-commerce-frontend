@@ -31,6 +31,15 @@ export default function Order() {
     return time.toLocaleTimeString();
   };
 
+  
+  // const calculatePrice = (items) => {
+  //   return items.price * items.quantity;
+  // };
+  const subCartTotalPrice = orders?.reduce((total, items) => {
+    return total + items.price;
+  }, 0);
+  const totalPrice = subCartTotalPrice || 0;
+
   return (
     <div className="pt-20 max-w-screen-2xl xl:px-24 px-10 ">
       <motion.div
@@ -143,11 +152,11 @@ export default function Order() {
 
         <div className="w-1/2 space-y-3 mt-4 md:mt-0">
           <h3 className="font-bold text-xl">Shopping Details</h3>
-          {/* <p>Total Item:<span className="font-medium">{cart?.length}</span></p> */}
-          {/* <p>Total Price:<span className="font-medium">${totalPrice?.toFixed(2)}</span></p> */}
+          <p>Total Item:<span className="font-medium"> {orders?.length} items</span></p>
+          <p>Total Price:<span className="font-medium"> ${totalPrice?.toFixed(2)}</span></p>
 
           <Link to={"/menu"}>
-            <button className="bg-green-300 btn">Menu</button>
+            <p className="text-xl text-green-200 underline mt-2 font-semibold">Shop more items</p>
           </Link>
         </div>
       </div>
